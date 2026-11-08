@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const helmet = require('helmet');
 const { rateLimit } = require('express-rate-limit');
 const path = require('path');
+const fs = require('fs');
 
 const required = ['DATABASE_URL','SESSION_SECRET','MANAGER_USERNAME','MANAGER_PASSWORD'];
 for (const k of required) if (!process.env[k]) { console.error(`Missing required environment setting: ${k}`); process.exit(1); }
@@ -33,6 +34,7 @@ const audit=(actor,action,target,details={})=>query('INSERT INTO audit_log(actor
 const asyncRoute=fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next);
 
 async function bootstrapManager(){
+ await query(fs.readFileSync(path.join(__dirname,'schema.sql'),'utf8'));
  const r=await query("SELECT id FROM users WHERE role='manager' LIMIT 1");
  if(!r.rowCount){ const hash=await bcrypt.hash(process.env.MANAGER_PASSWORD,12); await query("INSERT INTO users(username,password_hash,name,role,approved,title,department) VALUES($1,$2,'سامي أبو علي','manager',true,'مدير عام','الإدارة')",[process.env.MANAGER_USERNAME,hash]); console.log('Initial manager created from private environment settings.'); }
 }
@@ -52,6 +54,7 @@ app.post('/api/auth/login',asyncRoute(async(req,res)=>{
 }));
 app.post('/api/auth/logout',(req,res)=>req.session.destroy(()=>{res.clearCookie('ala.sid');res.json({ok:true});}));
 app.get('/api/me',requireAuth,asyncRoute(async(req,res)=>{const r=await query('SELECT * FROM users WHERE id=$1',[req.session.user.id]); if(!r.rowCount)return res.status(401).json({error:'انتهت الجلسة'});res.json({user:cleanUser(r.rows[0])});}));
+app.get('/api/health',(req,res)=>res.json({ok:true}));
 app.get('/api/dashboard',requireAuth,asyncRoute(async(req,res)=>{
  const mgr=req.session.user.role==='manager';
  const users=await query(`SELECT u.*, a.work_date, a.clock_in, a.clock_out, m.transfers,m.exchange,m.wallets FROM users u LEFT JOIN attendance a ON a.user_id=u.id AND a.work_date=CURRENT_DATE LEFT JOIN daily_metrics m ON m.user_id=u.id AND m.work_date=CURRENT_DATE ${mgr?"WHERE u.role='employee'":"WHERE u.id=$1"} ORDER BY u.created_at`,mgr?[]:[req.session.user.id]);

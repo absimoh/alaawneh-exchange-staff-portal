@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: alaawneh-exchange-staff-demo
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: alaawneh-exchange-demo-db
+          property: connectionString
+      - key: DATABASE_SSL
+        value: "true"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MANAGER_USERNAME
+        sync: false
+      - key: MANAGER_PASSWORD
+        sync: false
+
+databases:
+  - name: alaawneh-exchange-demo-db
+    databaseName: alaawneh_demo
+    user: alaawneh_demo
+    plan: free
+    region: frankfurt

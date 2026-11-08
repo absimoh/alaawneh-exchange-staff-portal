@@ -2,5 +2,6 @@ node_modules/
 .env
 .env.*
 !.env.example
+.render/
 npm-debug.log*
 .DS_Store
