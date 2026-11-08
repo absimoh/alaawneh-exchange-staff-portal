@@ -3,10 +3,11 @@ CREATE TABLE IF NOT EXISTS users (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(), username text NOT NULL UNIQUE,
  password_hash text NOT NULL, name text NOT NULL, role text NOT NULL CHECK(role IN ('manager','employee')),
  title text NOT NULL DEFAULT 'موظف', department text NOT NULL DEFAULT 'خدمة العملاء',
- approved boolean NOT NULL DEFAULT false, salary numeric(12,2) NOT NULL DEFAULT 0 CHECK(salary >= 0),
+ approved boolean NOT NULL DEFAULT false, disabled boolean NOT NULL DEFAULT false, salary numeric(12,2) NOT NULL DEFAULT 0 CHECK(salary >= 0),
  rating integer NOT NULL DEFAULT 0 CHECK(rating BETWEEN 0 AND 100),
  status text NOT NULL DEFAULT 'بانتظار التفعيل', created_at timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE users ADD COLUMN IF NOT EXISTS disabled boolean NOT NULL DEFAULT false;
 CREATE TABLE IF NOT EXISTS attendance (
  id bigserial PRIMARY KEY, user_id uuid NOT NULL REFERENCES users(id), work_date date NOT NULL DEFAULT CURRENT_DATE,
  clock_in timestamptz, clock_out timestamptz, UNIQUE(user_id, work_date)
@@ -29,5 +30,13 @@ CREATE TABLE IF NOT EXISTS audit_log (
  id bigserial PRIMARY KEY, actor_id uuid REFERENCES users(id), action text NOT NULL,
  target_id uuid, details jsonb NOT NULL DEFAULT '{}', created_at timestamptz NOT NULL DEFAULT now()
 );
+CREATE TABLE IF NOT EXISTS operations (
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(), employee_id uuid NOT NULL REFERENCES users(id),
+ operation_type text NOT NULL CHECK(operation_type IN ('تحويل أموال','تصريف عملات','محافظ إلكترونية')),
+ amount numeric(14,2) NOT NULL CHECK(amount > 0), currency_from text NOT NULL CHECK(currency_from IN ('JOD','USD','SAR','AED','EUR')),
+ result_amount numeric(14,2) NOT NULL CHECK(result_amount >= 0), currency_to text NOT NULL CHECK(currency_to IN ('JOD','USD','SAR','AED','EUR')),
+ reference_code text NOT NULL DEFAULT '', note text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now()
+);
 CREATE INDEX IF NOT EXISTS attendance_date_idx ON attendance(work_date);
 CREATE INDEX IF NOT EXISTS tasks_employee_idx ON tasks(employee_id, status);
+CREATE INDEX IF NOT EXISTS operations_employee_idx ON operations(employee_id, created_at DESC);

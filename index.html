@@ -171,6 +171,7 @@
                     <button onclick="navigateTo('signup')" class="mt-2 text-sm text-cyan-400 hover:underline font-semibold">إنشاء حساب جديد للموظفين</button>
                 </div>
             </div>
+
         </section>
 
         <!-- SIGNUP VIEW -->
@@ -347,6 +348,14 @@
                     </div>
                 </div>
             </div>
+            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
+                    <div><h3 class="font-bold text-lg">سجل عمليات الفرع</h3><p class="text-xs text-slate-400">عمليات التحويل والتصريف والمحافظ المسجلة، بدون بيانات تعريف العملاء.</p></div>
+                    <select id="operation-employee-filter" onchange="renderOperationsLog()" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-3 py-2 text-xs"><option value="all">كل الموظفين</option></select>
+                </div>
+                <div class="overflow-x-auto"><table class="w-full text-right text-xs"><thead><tr class="border-b border-slate-700 text-slate-400"><th class="py-2 px-2">الوقت</th><th class="py-2 px-2">الموظف</th><th class="py-2 px-2">العملية</th><th class="py-2 px-2">المبلغ الداخل</th><th class="py-2 px-2">المبلغ الناتج</th><th class="py-2 px-2">المرجع</th><th class="py-2 px-2">ملاحظة</th></tr></thead><tbody id="manager-operations-body"></tbody></table></div>
+                <p id="operations-empty" class="hidden text-center text-xs text-slate-500 py-5">لا توجد عمليات مسجلة بعد.</p>
+            </section>
         </section>
 
         <!-- EMPLOYEE DASHBOARD VIEW -->
@@ -392,6 +401,20 @@
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">إيداعات محافظ</label><input id="metric-wallets" type="number" min="0" onchange="saveDailyMetrics()" class="mt-2 w-full bg-slate-900 light:bg-slate-50 border rounded-lg p-2" value="0"></div>
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">ساعات الدوام</label><span id="metric-hours" class="block mt-2 font-bold text-cyan-400">0</span></div>
             </div>
+            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+                <h3 class="font-bold text-base mb-1">تسجيل عملية فرع</h3><p class="text-xs text-slate-400 mb-4">سجّل العملية بعد إتمامها. لا تدخل اسم العميل أو رقم هويته أو هاتفه أو بيانات حسابه.</p>
+                <form id="operation-form" onsubmit="addOperation(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+                    <div><label class="block text-xs text-slate-400 mb-1">نوع العملية</label><select id="operation-type" required class="w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><option>تحويل أموال</option><option>تصريف عملات</option><option>محافظ إلكترونية</option></select></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">المبلغ المستلم</label><div class="flex gap-1"><input id="operation-amount" type="number" step="0.01" min="0.01" required class="min-w-0 w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><select id="operation-currency-from" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-2 text-xs"><option>JOD</option><option>USD</option><option>SAR</option><option>AED</option><option>EUR</option></select></div></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">المبلغ المصروف/المحوّل</label><div class="flex gap-1"><input id="operation-result" type="number" step="0.01" min="0" required class="min-w-0 w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><select id="operation-currency-to" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-2 text-xs"><option>JOD</option><option>USD</option><option>SAR</option><option>AED</option><option>EUR</option></select></div></div>
+                    <div><label class="block text-xs text-slate-400 mb-1">رقم مرجعي داخلي (اختياري)</label><input id="operation-reference" maxlength="40" class="w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs" placeholder="مثال: TRX-1042"></div>
+                    <div class="md:col-span-3"><label class="block text-xs text-slate-400 mb-1">ملاحظة مختصرة (اختياري)</label><input id="operation-note" maxlength="250" class="w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs" placeholder="لا تكتب بيانات شخصية للعملاء"></div>
+                    <button class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold">حفظ العملية</button>
+                </form>
+            </section>
+            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+                <h3 class="font-bold text-base mb-1">عملياتي المسجلة</h3><p class="text-xs text-slate-400 mb-3">آخر العمليات المكتملة التي سجلتها.</p><div id="employee-operations-list"></div>
+            </section>
             <!-- Employee Tasks & Files Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -501,6 +524,7 @@
         let appState = {
             currentUser: null,
             employees: [],
+            operations: [],
             notifications: [],
             generatedTempUser: null
         };
@@ -530,6 +554,7 @@
             if (!appState.currentUser) return;
             const data = await api('/dashboard');
             appState.employees = data.employees || [];
+            appState.operations = data.operations || [];
             appState.notifications = data.notifications || [];
             if (appState.currentUser.role === 'manager') renderManagerDashboard(); else renderEmployeeDashboard();
         }
@@ -667,8 +692,9 @@
                     <td class="py-3 px-2">
                         <div class="font-bold text-slate-200 light:text-slate-800">${escapeHtml(emp.name)}</div>
                         <div class="text-[10px] text-slate-400">${escapeHtml(emp.title)} • (${escapeHtml(emp.dept)})</div>
+                        <div class="text-[10px] text-slate-500 mt-1">اليوم: تحويل ${Number(emp.metrics?.transfers||0)} · تصريف ${Number(emp.metrics?.exchange||0)} · محافظ ${Number(emp.metrics?.wallets||0)}</div>
                     </td>
-                    <td class="py-3 px-2">${statusBadge}</td>
+                    <td class="py-3 px-2">${statusBadge}<div class="text-[10px] text-slate-500 mt-1">حضور ${escapeHtml(emp.attendance?.clockIn||'—')} · انصراف ${escapeHtml(emp.attendance?.clockOut||'—')}</div></td>
                     <td class="py-3 px-2">
                         <div class="flex items-center gap-2">
                             <div class="w-16 bg-slate-700 light:bg-slate-200 rounded-full h-1.5 overflow-hidden">
@@ -679,7 +705,7 @@
                     </td>
                 <td class="py-3 px-2 font-bold text-emerald-400 font-mono">${Number(emp.salary).toLocaleString()} د.أ</td>
                     <td class="py-3 px-2 text-center">
-                        ${emp.approved ? `<button onclick="openEditEmpModal('${emp.id}')" class="px-2.5 py-1 rounded-lg bg-slate-700 light:bg-slate-200 hover:bg-cyan-600 hover:text-white transition text-[11px]"><i class="fa-solid fa-pen-to-square"></i> تعديل</button>` : `<button onclick="approveEmployee('${emp.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px]">تفعيل الحساب</button>`}
+                        <div class="flex flex-col gap-1 items-center">${emp.approved ? `<button onclick="openEditEmpModal('${emp.id}')" class="px-2.5 py-1 rounded-lg bg-slate-700 light:bg-slate-200 hover:bg-cyan-600 hover:text-white transition text-[11px]"><i class="fa-solid fa-pen-to-square"></i> تعديل</button>` : `<button onclick="approveEmployee('${emp.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px]">تفعيل الحساب</button>`}<button onclick="archiveEmployee('${escapeHtml(emp.id)}')" class="px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-300 hover:bg-rose-600 hover:text-white text-[10px]">أرشفة الموظف</button></div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -694,6 +720,10 @@
 
             renderNotificationsList();
             renderLiveStatusMonitor();
+            const filter=document.getElementById('operation-employee-filter'); const selected=filter.value;
+            filter.innerHTML='<option value="all">كل الموظفين</option>'+appState.employees.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join('');
+            filter.value=appState.employees.some(e=>e.id===selected)?selected:'all';
+            renderOperationsLog();
         }
 
         function renderNotificationsList() {
@@ -720,6 +750,12 @@
             });
         }
 
+        function renderOperationsLog() {
+            const filter=document.getElementById('operation-employee-filter');
+            if(filter){const selected=filter.value||'all';const list=appState.operations.filter(o=>selected==='all'||o.employeeId===selected);const body=document.getElementById('manager-operations-body');body.innerHTML='';document.getElementById('operations-empty').classList.toggle('hidden',list.length>0);list.forEach(o=>{const tr=document.createElement('tr');tr.className='border-b border-slate-700/40';tr.innerHTML=`<td class="py-2 px-2 whitespace-nowrap">${escapeHtml(o.time)}</td><td class="py-2 px-2">${escapeHtml(o.employeeName)}</td><td class="py-2 px-2">${escapeHtml(o.type)}</td><td class="py-2 px-2 font-mono">${Number(o.amount).toLocaleString()} ${escapeHtml(o.currencyFrom)}</td><td class="py-2 px-2 font-mono">${Number(o.resultAmount).toLocaleString()} ${escapeHtml(o.currencyTo)}</td><td class="py-2 px-2">${escapeHtml(o.referenceCode||'—')}</td><td class="py-2 px-2">${escapeHtml(o.note||'—')}</td>`;body.appendChild(tr);});}
+            const employeeList=document.getElementById('employee-operations-list');if(employeeList){employeeList.innerHTML='';const own=appState.operations.slice(0,10);if(!own.length)employeeList.innerHTML='<p class="text-xs text-slate-500">لا توجد عمليات مسجلة.</p>';own.forEach(o=>{const row=document.createElement('div');row.className='flex flex-wrap justify-between gap-2 border-b border-slate-700/40 py-2 text-xs';row.innerHTML=`<span>${escapeHtml(o.type)} · ${Number(o.amount).toLocaleString()} ${escapeHtml(o.currencyFrom)} ← ${Number(o.resultAmount).toLocaleString()} ${escapeHtml(o.currencyTo)}</span><span class="text-slate-500">${escapeHtml(o.time)}</span>`;employeeList.appendChild(row);});}
+        }
+
         // RENDER EMPLOYEE DASHBOARD
         function renderEmployeeDashboard() {
             // Refresh employee data from appState
@@ -742,6 +778,7 @@
             document.getElementById('work-status-select').value = emp.status === 'في اجتماع' || emp.status === 'في استراحة' ? emp.status : 'على رأس العمل';
             for (const [id,key] of [['metric-transfers','transfers'],['metric-exchange','exchange'],['metric-wallets','wallets']]) document.getElementById(id).value = emp.metrics[key] || 0;
             document.getElementById('metric-hours').innerText = workedHours(emp) + ' ساعة';
+            renderOperationsLog();
 
             // Tasks List Render
             const tasksContainer = document.getElementById('employee-tasks-list');
@@ -808,8 +845,11 @@
             api(`/employee/tasks/${encodeURIComponent(taskId)}/complete`,{method:'POST'}).then(()=>refreshData()).then(()=>showToast('تم إرسال إشعار إنجاز العمل إلى لوحة المدير.','success')).catch(e=>showToast(e.message,'error'));
         }
 
+        function addOperation(e){e.preventDefault();const payload={type:document.getElementById('operation-type').value,amount:Number(document.getElementById('operation-amount').value),currencyFrom:document.getElementById('operation-currency-from').value,resultAmount:Number(document.getElementById('operation-result').value),currencyTo:document.getElementById('operation-currency-to').value,referenceCode:document.getElementById('operation-reference').value.trim(),note:document.getElementById('operation-note').value.trim()};api('/employee/operations',{method:'POST',body:JSON.stringify(payload)}).then(()=>{document.getElementById('operation-form').reset();return refreshData();}).then(()=>showToast('تم تسجيل العملية.','success')).catch(err=>showToast(err.message,'error'));}
+
         // MANAGER ACTIONS & MODALS
         function approveEmployee(id) { api(`/manager/employees/${encodeURIComponent(id)}/approve`,{method:'POST'}).then(()=>refreshData()).then(()=>showToast('تم تفعيل حساب الموظف.','success')).catch(e=>showToast(e.message,'error')); }
+        function archiveEmployee(id){if(!confirm('سيتم إيقاف حساب الموظف وإخفاؤه من قائمة النشطين. ستبقى سجلاته محفوظة. هل تريد المتابعة؟'))return;api(`/manager/employees/${encodeURIComponent(id)}`,{method:'DELETE'}).then(()=>refreshData()).then(()=>showToast('تم إيقاف الحساب وأرشفته مع حفظ سجلاته.','success')).catch(e=>showToast(e.message,'error'));}
         function openEditEmpModal(empId) {
             const emp = appState.employees.find(e => e.id === empId);
             if (emp) {
