@@ -1,0 +1,17 @@
+{
+  "name": "alaawneh-exchange-staff-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "بوابة آمنة لإدارة دوام وأداء موظفي العلاونة للصرافة",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-pg-simple": "^10.0.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3"
+  }
+}
