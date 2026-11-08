@@ -36,7 +36,8 @@ const asyncRoute=fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(nex
 async function bootstrapManager(){
  await query(fs.readFileSync(path.join(__dirname,'schema.sql'),'utf8'));
  const r=await query("SELECT id FROM users WHERE role='manager' LIMIT 1");
- if(!r.rowCount){ const hash=await bcrypt.hash(process.env.MANAGER_PASSWORD,12); await query("INSERT INTO users(username,password_hash,name,role,approved,title,department) VALUES($1,$2,'سامي أبو علي','manager',true,'مدير عام','الإدارة')",[process.env.MANAGER_USERNAME,hash]); console.log('Initial manager created from private environment settings.'); }
+ if(!r.rowCount){ const hash=await bcrypt.hash(process.env.MANAGER_PASSWORD,12); await query("INSERT INTO users(username,password_hash,name,role,approved,title,department) VALUES($1,$2,'سامي أبو علي','manager',true,'مدير عام','الإدارة')",[process.env.MANAGER_USERNAME.trim().toLowerCase(),hash]); console.log('Initial manager created from private environment settings.'); }
+ else await query("UPDATE users SET username=lower(username) WHERE role='manager' AND username<>lower(username)");
 }
 app.post('/api/auth/register',asyncRoute(async(req,res)=>{
  const {username,password,name,title,dept}=req.body||{};
