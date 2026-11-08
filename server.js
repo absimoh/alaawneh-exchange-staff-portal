@@ -10,6 +10,7 @@ const path = require('path');
 const required = ['DATABASE_URL','SESSION_SECRET','MANAGER_USERNAME','MANAGER_PASSWORD'];
 for (const k of required) if (!process.env[k]) { console.error(`Missing required environment setting: ${k}`); process.exit(1); }
 if (process.env.MANAGER_PASSWORD.length < 14) { console.error('MANAGER_PASSWORD must be at least 14 characters.'); process.exit(1); }
+if (process.env.SESSION_SECRET.length < 32) { console.error('SESSION_SECRET must be at least 32 characters.'); process.exit(1); }
 const pool = new Pool({ connectionString:process.env.DATABASE_URL, ssl:process.env.DATABASE_SSL==='false'?false:{ rejectUnauthorized:false } });
 const app = express();
 app.disable('x-powered-by'); app.set('trust proxy', 1);
