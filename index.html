@@ -94,6 +94,7 @@
         header { background:rgba(255,255,255,.93)!important; border-color:#e4e8ec!important; }
         body.dark header { background:rgba(12,22,35,.94)!important; border-color:#203044!important; }
         .app-shell { max-width:1440px; margin:auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:28px; }
+        .app-shell.auth-mode { grid-template-columns:minmax(0,1fr); }
         .side-nav { position:sticky; top:88px; align-self:start; border-radius:20px; padding:18px; background:#fff; border:1px solid #e7ebef; box-shadow:0 8px 30px rgba(16,36,59,.04); }
         body.dark .side-nav { background:#101d2c; border-color:#223246; }
         .side-nav-title { color:#8b97a5; font-size:10px; font-weight:800; letter-spacing:.08em; padding:10px 12px 7px; }
@@ -265,7 +266,7 @@
 
     <!-- Main Container -->
     <main class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8 py-6 min-h-[calc(100vh-4rem)]">
-      <div class="app-shell">
+      <div class="app-shell auth-mode">
        <aside id="app-sidebar" class="side-nav hidden">
         <div class="w-full"><div class="side-nav-title">مساحة العمل</div>
          <div id="manager-nav" class="hidden space-y-1">
@@ -744,6 +745,7 @@
             const managerNav = document.getElementById('manager-nav');
             const employeeNav = document.getElementById('employee-nav');
             const authenticated = !!appState.currentUser && ['manager','employee'].includes(viewId);
+            document.querySelector('.app-shell')?.classList.toggle('auth-mode', !authenticated);
             sidebar.classList.toggle('hidden', !authenticated);
             managerNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'manager');
             employeeNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'employee');
