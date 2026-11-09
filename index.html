@@ -105,6 +105,8 @@
         .nav-link i { width:18px; text-align:center; }
         .scroll-mt-24 { scroll-margin-top:100px; }
         .content-area { min-width:0; }
+        .manager-single { grid-template-columns:minmax(0,1fr)!important; }
+        .manager-single .lg\:col-span-2 { grid-column:span 1; }
         .view-page { animation:rise .25s ease-out; }
         @keyframes rise { from { opacity:.5; transform:translateY(5px) } to { opacity:1; transform:none } }
         .premium-card { background:#fff; border:1px solid #e6eaee; border-radius:18px; box-shadow:0 8px 28px rgba(16,36,59,.035); }
@@ -271,15 +273,15 @@
        <aside id="app-sidebar" class="side-nav hidden">
         <div class="w-full"><div class="side-nav-title">مساحة العمل</div>
          <div id="manager-nav" class="hidden space-y-1">
-          <button class="nav-link active" data-nav="manager" onclick="navigateTo('manager')"><i class="fa-solid fa-chart-pie"></i> نظرة عامة</button>
-          <button class="nav-link" data-nav="employees" onclick="navigateTo('manager','employees')"><i class="fa-solid fa-users"></i> الموظفون والرواتب</button>
-          <button class="nav-link" data-nav="operations" onclick="navigateTo('manager','operations')"><i class="fa-solid fa-arrow-right-arrow-left"></i> سجل العمليات</button>
-          <button class="nav-link" data-nav="activity" onclick="navigateTo('manager','activity')"><i class="fa-regular fa-bell"></i> الإنجاز والحضور</button>
+          <button class="nav-link active" data-nav="manager-overview" onclick="navigateTo('manager','overview')"><i class="fa-solid fa-chart-pie"></i> نظرة عامة</button>
+          <button class="nav-link" data-nav="manager-employees" onclick="navigateTo('manager','employees')"><i class="fa-solid fa-users"></i> الموظفون والرواتب</button>
+          <button class="nav-link" data-nav="manager-operations" onclick="navigateTo('manager','operations')"><i class="fa-solid fa-arrow-right-arrow-left"></i> سجل العمليات</button>
+          <button class="nav-link" data-nav="manager-activity" onclick="navigateTo('manager','activity')"><i class="fa-regular fa-bell"></i> الإنجاز والحضور</button>
          </div>
          <div id="employee-nav" class="hidden space-y-1">
-          <button class="nav-link active" data-nav="employee" onclick="navigateTo('employee')"><i class="fa-solid fa-house"></i> مساحة عملي</button>
+          <button class="nav-link active" data-nav="employee-overview" onclick="navigateTo('employee','overview')"><i class="fa-solid fa-house"></i> مساحة عملي</button>
           <button class="nav-link" data-nav="employee-operations" onclick="navigateTo('employee','operations')"><i class="fa-solid fa-arrow-right-arrow-left"></i> تسجيل عملية</button>
-          <button class="nav-link" data-nav="employee-tasks" onclick="navigateTo('employee','tasks')"><i class="fa-solid fa-list-check"></i> مهامي وملفاتي</button>
+          <button class="nav-link" data-nav="employee-tasks" onclick="navigateTo('employee','tasks')"><i class="fa-solid fa-list-check"></i> مهامي وتكليفاتي</button>
          </div>
          <div class="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400 leading-5"><i class="fa-solid fa-lock ml-1 text-emerald-600"></i> مساحة عمل داخلية<br>تجريبية للعرض والتقييم</div>
         </div>
@@ -398,7 +400,7 @@
         <!-- MANAGER DASHBOARD VIEW -->
         <section id="view-manager" class="view-page hidden space-y-6">
             <!-- Manager Top Greeting Header -->
-                <div class="premium-card flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
+            <div data-manager-page="overview" class="premium-card flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold mb-2">
                         <i class="fa-solid fa-shield-halved"></i> لوحة الإدارة العليا
@@ -414,7 +416,7 @@
             </div>
 
             <!-- Stats Overview Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div data-manager-page="overview" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="premium-card stat-card p-5">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs text-slate-400 font-semibold">حسابات الموظفين</span>
@@ -449,11 +451,19 @@
                 </div>
             </div>
 
+            <section data-manager-page="overview" class="premium-card p-6">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
+                    <div><div class="page-eyebrow">قراءة تشغيلية</div><h3 class="text-lg font-extrabold">مؤشرات الفرع اليوم</h3></div>
+                    <p class="text-xs text-slate-400">تعرض بيانات العمل المسجلة لهذا اليوم</p>
+                </div>
+                <div id="manager-insights" class="grid grid-cols-1 lg:grid-cols-3 gap-4"></div>
+            </section>
+
             <!-- Dashboard Content Split: Table + Realtime Feed -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div id="manager-content-grid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <!-- Employee Table (2 Cols wide) -->
-                <div id="manager-employees-section" class="lg:col-span-2 premium-card p-6 scroll-mt-24">
+                <div id="manager-employees-section" data-manager-page="employees" class="lg:col-span-2 premium-card p-6 scroll-mt-24">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-lg flex items-center gap-2">
                             <i class="fa-solid fa-user-gear text-cyan-400"></i> مراقبة وتقييم الموظفين والرواتب
@@ -484,7 +494,7 @@
                 </div>
 
                 <!-- Notifications & Activity Log Sidebar (1 Col wide) -->
-                <div class="space-y-6">
+                <div data-manager-page="activity" class="space-y-6">
                     <!-- Live Task Finish Notifications -->
                     <div id="manager-activity-section" class="premium-card p-5 scroll-mt-24">
                         <h3 class="font-bold text-sm mb-3 flex items-center justify-between">
@@ -512,7 +522,7 @@
                     </div>
                 </div>
             </div>
-            <section id="manager-operations-section" class="premium-card p-6 scroll-mt-24">
+            <section id="manager-operations-section" data-manager-page="operations" class="premium-card p-6 scroll-mt-24">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
                     <div><h3 class="font-bold text-lg">سجل عمليات الفرع</h3><p class="text-xs text-slate-400">آخر 200 عملية مسجلة. لا يحتوي هذا السجل بيانات تعريف العملاء.</p></div>
                     <button type="button" onclick="exportOperationsCsv()" class="soft-button rounded-xl px-3 py-2 text-xs font-bold"><i class="fa-solid fa-file-arrow-down ml-1"></i> تصدير CSV</button>
@@ -532,7 +542,7 @@
         <!-- EMPLOYEE DASHBOARD VIEW -->
         <section id="view-employee" class="view-page hidden space-y-6">
             <!-- Employee Header -->
-            <div class="bg-gradient-to-r from-slate-800 to-slate-800/80 light:from-white light:to-slate-50 border border-slate-700/60 light:border-slate-200 p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div data-employee-page="overview" class="bg-gradient-to-r from-slate-800 to-slate-800/80 light:from-white light:to-slate-50 border border-slate-700/60 light:border-slate-200 p-6 rounded-3xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold text-xl">
                         <i class="fa-solid fa-user-tie"></i>
@@ -558,7 +568,7 @@
                 </div>
             </div>
 
-            <div class="premium-card p-5 flex flex-wrap items-center justify-between gap-4">
+            <div data-employee-page="overview" class="premium-card p-5 flex flex-wrap items-center justify-between gap-4">
                 <div><h3 class="font-bold">الحضور وحالة العمل</h3><p id="emp-attendance-info" class="text-xs text-slate-400 mt-1">لم يتم تسجيل الحضور اليوم</p></div>
                 <div class="flex flex-wrap gap-2">
                     <button id="clock-in-btn" onclick="clockIn()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold">تسجيل الحضور</button>
@@ -566,14 +576,18 @@
                     <button id="clock-out-btn" onclick="clockOut()" class="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold">تسجيل الانصراف</button>
                 </div>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div data-employee-page="overview" class="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">تحويلات مسجلة اليوم</label><span id="metric-transfers" class="block mt-2 font-bold text-cyan-400">0</span></div>
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">عمليات تصريف اليوم</label><span id="metric-exchange" class="block mt-2 font-bold text-cyan-400">0</span></div>
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">عمليات المحافظ اليوم</label><span id="metric-wallets" class="block mt-2 font-bold text-cyan-400">0</span></div>
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">ساعات الدوام المسجلة</label><span id="metric-hours" class="block mt-2 font-bold text-cyan-400">0</span></div>
             </div>
-            <section id="employee-operations-section" class="premium-card p-6 scroll-mt-24">
-                <h3 class="font-bold text-base mb-1">تسجيل عملية فرع</h3><p class="text-xs text-slate-400 mb-4">سجّل العملية المكتملة. سعر التنفيذ يُحسب من المبلغين ولا يمثل تسعيرة صرف مركزية. لا تدخل بيانات تعريف العملاء.</p>
+            <section data-employee-page="overview" class="premium-card p-5">
+                <div class="page-eyebrow">مساحة تخصصي</div><h3 id="employee-specialty-title" class="text-lg font-extrabold mt-1">القسم</h3><p id="employee-specialty-description" class="text-xs text-slate-400 mt-2"></p>
+                <div id="employee-specialty-metrics" class="flex flex-wrap gap-2 mt-4"></div>
+            </section>
+            <section id="employee-operations-section" data-employee-page="operations" class="premium-card p-6 scroll-mt-24">
+                <h3 id="employee-operation-heading" class="font-bold text-base mb-1">تسجيل عملية</h3><p id="employee-operation-help" class="text-xs text-slate-400 mb-4">سجّل العملية المكتملة. سعر التنفيذ يُحسب من المبلغين ولا يمثل تسعيرة صرف مركزية. لا تدخل بيانات تعريف العملاء.</p>
                 <form id="operation-form" onsubmit="addOperation(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
                     <div><label class="block text-xs text-slate-400 mb-1">نوع العملية</label><select id="operation-type" required class="w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><option>تحويل أموال</option><option>تصريف عملات</option><option>محافظ إلكترونية</option></select></div>
                     <div><label class="block text-xs text-slate-400 mb-1">المبلغ المستلم</label><div class="flex gap-1"><input id="operation-amount" type="number" step="0.01" min="0.01" required oninput="updateOperationRatePreview()" class="min-w-0 w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><select id="operation-currency-from" onchange="updateOperationRatePreview()" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-2 text-xs"><option>JOD</option><option>USD</option><option>SAR</option><option>AED</option><option>EUR</option></select></div></div>
@@ -583,11 +597,11 @@
                     <button class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold">حفظ العملية</button>
                 </form>
             </section>
-            <section id="employee-history-section" class="premium-card p-6 scroll-mt-24">
+            <section id="employee-history-section" data-employee-page="operations" class="premium-card p-6 scroll-mt-24">
                 <h3 class="font-bold text-base mb-1">عملياتي المسجلة</h3><p class="text-xs text-slate-400 mb-3">آخر العمليات المكتملة التي سجلتها.</p><div id="employee-operations-list"></div>
             </section>
             <!-- Employee Tasks & Files Grid -->
-            <div id="employee-tasks-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 scroll-mt-24">
+            <div id="employee-tasks-section" data-employee-page="tasks" class="grid grid-cols-1 lg:grid-cols-3 gap-6 scroll-mt-24">
 
                 <!-- Assigned Tasks List (2 Cols) -->
                 <div class="lg:col-span-2 space-y-4">
@@ -737,6 +751,8 @@
         // NAVIGATION & VIEW SWITCHING
         function navigateTo(viewId, section = '') {
             if (viewId === 'dashboard') viewId = appState.currentUser?.role === 'manager' ? 'manager' : appState.currentUser ? 'employee' : 'login';
+            const managerPage=section||'overview';
+            const employeePage=section||'overview';
             document.querySelectorAll('.view-page').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`view-${viewId}`);
             if (target) {
@@ -750,17 +766,13 @@
             sidebar.classList.toggle('hidden', !authenticated);
             managerNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'manager');
             employeeNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'employee');
+            if(viewId==='manager')document.querySelectorAll('#view-manager [data-manager-page]').forEach(el=>el.classList.toggle('hidden',el.dataset.managerPage!==managerPage));
+            if(viewId==='employee')document.querySelectorAll('#view-employee [data-employee-page]').forEach(el=>el.classList.toggle('hidden',el.dataset.employeePage!==employeePage));
+            document.getElementById('manager-content-grid')?.classList.toggle('manager-single',viewId==='manager'&&['employees','activity'].includes(managerPage));
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            const activeKey = viewId === 'manager' ? (section || 'manager') : viewId === 'employee' ? (section ? `employee-${section}` : 'employee') : '';
+            const activeKey = viewId === 'manager' ? `manager-${managerPage}` : viewId === 'employee' ? `employee-${employeePage}` : '';
             document.querySelector(`.nav-link[data-nav="${activeKey}"]`)?.classList.add('active');
-            if (viewId === 'manager' && section) {
-                const ids = {employees:'manager-employees-section',operations:'manager-operations-section',activity:'manager-activity-section'};
-                document.getElementById(ids[section])?.scrollIntoView({behavior:'smooth',block:'start'});
-            }
-            if (viewId === 'employee' && section) {
-                const ids = {operations:'employee-operations-section',tasks:'employee-tasks-section'};
-                document.getElementById(ids[section])?.scrollIntoView({behavior:'smooth',block:'start'});
-            }
+            if(authenticated)window.scrollTo({top:0,behavior:'smooth'});
             updateHeaderUI();
         }
 
@@ -929,6 +941,7 @@
             renderNotificationsList();
             renderLiveStatusMonitor();
             renderAuditLog();
+            renderManagerInsights();
             updateTicker();
             const filter=document.getElementById('operation-employee-filter'); const selected=filter.value;
             filter.innerHTML='<option value="all">كل الموظفين</option>'+appState.employees.map(e=>`<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)}</option>`).join('');
@@ -940,6 +953,27 @@
             document.getElementById('app-sidebar').classList.remove('hidden');
             document.getElementById('manager-nav').classList.toggle('hidden', appState.currentUser?.role !== 'manager');
             document.getElementById('employee-nav').classList.toggle('hidden', appState.currentUser?.role !== 'employee');
+        }
+
+        function renderManagerInsights(){
+            const host=document.getElementById('manager-insights');if(!host)return;
+            const today=localDateString(),todayOps=appState.operations.filter(o=>o.createdAt===today);
+            const operationTypes=['تحويل أموال','تصريف عملات','محافظ إلكترونية'];
+            const typeRows=operationTypes.map(type=>({type,count:todayOps.filter(o=>o.type===type).length}));
+            const maxOps=Math.max(1,...typeRows.map(x=>x.count));
+            const approved=appState.employees.filter(e=>e.approved);
+            const present=approved.filter(e=>e.attendance?.date===today&&e.attendance?.clockIn&&!e.attendance?.clockOut).length;
+            const breaks=approved.filter(e=>e.status==='في استراحة'||e.status==='في اجتماع').length;
+            const ended=approved.filter(e=>e.status==='انتهى الدوام').length;
+            const noClock=approved.filter(e=>e.attendance?.date!==today||!e.attendance?.clockIn).length;
+            const tasks=appState.employees.flatMap(e=>e.tasks||[]),completed=tasks.filter(t=>t.status==='completed').length;
+            const taskRate=tasks.length?Math.round(completed/tasks.length*100):0;
+            const ranked=[...approved].sort((a,b)=>Number(b.rating)-Number(a.rating)).slice(0,5);
+            const bar=(label,value,max,color)=>`<div class="space-y-1.5"><div class="flex justify-between gap-2 text-[11px]"><span>${escapeHtml(label)}</span><strong>${Number(value).toLocaleString('ar-JO')}</strong></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div class="h-full rounded-full ${color}" style="width:${max?Math.max(0,Math.min(100,value/max*100)):0}%"></div></div></div>`;
+            const chartCard=(title,icon,content)=>`<article class="rounded-2xl border border-slate-200 dark:border-slate-700 p-4"><h4 class="font-bold text-sm mb-4 flex items-center gap-2"><i class="fa-solid ${icon} text-emerald-600"></i>${title}</h4>${content}</article>`;
+            host.innerHTML=chartCard('حركة العمليات','fa-arrow-right-arrow-left',`<div class="space-y-4">${typeRows.map(x=>bar(x.type,x.count,maxOps,'bg-emerald-600')).join('')}<p class="text-[10px] text-slate-500 pt-1">${todayOps.length} عملية مسجلة ضمن آخر ${appState.operations.length} عملية محمّلة</p></div>`)
+              +chartCard('الحضور وحالة الدوام','fa-user-clock',`<div class="space-y-4">${bar('على رأس العمل',present,Math.max(1,approved.length),'bg-emerald-600')}${bar('في اجتماع أو استراحة',breaks,Math.max(1,approved.length),'bg-amber-500')}${bar('أنهوا الدوام',ended,Math.max(1,approved.length),'bg-cyan-600')}${bar('لم يسجلوا الحضور',noClock,Math.max(1,approved.length),'bg-slate-500')}<p class="text-[10px] text-slate-500 pt-1">من أصل ${approved.length} موظفاً معتمداً</p></div>`)
+              +chartCard('إنجاز المهام والأداء','fa-chart-line',`<div class="space-y-4"><div class="flex justify-between text-xs"><span>إنجاز المهام</span><strong>${taskRate}%</strong></div><div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden"><div class="h-full bg-cyan-600 rounded-full" style="width:${taskRate}%"></div></div><div class="text-[10px] text-slate-500">${completed} من ${tasks.length} مهمة مكتملة</div><div class="border-t border-slate-200 dark:border-slate-700 pt-3 space-y-2">${ranked.length?ranked.map((e,i)=>`<div class="flex justify-between text-[11px] gap-2"><span>${i+1}. ${escapeHtml(e.name)}</span><strong class="text-amber-500">${Number(e.rating)}%</strong></div>`).join(''):'<p class="text-[10px] text-slate-500">لا توجد تقييمات حتى الآن.</p>'}</div></div>`);
         }
 
         function renderNotificationsList() {
@@ -1011,6 +1045,23 @@
             document.getElementById('emp-portal-status').innerText = emp.status;
             const statusPill=document.getElementById('emp-portal-status');const statusTone=emp.status==='في استراحة'?'bg-amber-500/15 text-amber-300 border-amber-500/30':emp.status==='في اجتماع'?'bg-violet-500/15 text-violet-300 border-violet-500/30':emp.status==='على رأس العمل'?'bg-emerald-500/15 text-emerald-300 border-emerald-500/30':'bg-slate-500/15 text-slate-300 border-slate-500/30';statusPill.className=`px-2 py-0.5 text-[10px] rounded-full border ${statusTone}`;
             document.getElementById('emp-portal-title-dept').innerText = `${emp.title} | قسم ${emp.dept}`;
+            const specialty=String(emp.dept||'').trim();
+            const specialtyKey=specialty.includes('تحويل')?'transfer':specialty.includes('تصريف')||specialty.includes('عملات')?'exchange':specialty.includes('محافظ')?'wallet':specialty.includes('صندوق')?'cashier':'service';
+            const specialtyConfig={
+                transfer:{title:'قسم تحويل الأموال',description:'مساحة مخصصة لتسجيل ومراجعة التحويلات التي تنجزها، مع متابعة حضورك ومهامك اليومية.',operation:'تحويل أموال',metric:'transfers',metricLabel:'تحويلات مسجلة اليوم'},
+                exchange:{title:'قسم تصريف العملات',description:'تابع عمليات تصريف العملات التي سجلتها اليوم. يظهر سعر التنفيذ المحسوب لكل عملية من المبالغ المدخلة.',operation:'تصريف عملات',metric:'exchange',metricLabel:'عمليات تصريف اليوم'},
+                wallet:{title:'قسم المحافظ الإلكترونية',description:'سجّل عمليات الإيداع والخدمات المنفذة عبر المحافظ وتابع سجل عملياتك ومهامك.',operation:'محافظ إلكترونية',metric:'wallets',metricLabel:'عمليات المحافظ اليوم'},
+                cashier:{title:'قسم الصندوق',description:'تابع عمليات الصندوق المسجلة ومؤشرات دوامك اليومية من مساحة العمل الخاصة بك.',operation:'تحويل أموال',metric:'transfers',metricLabel:'عمليات مسجلة اليوم'},
+                service:{title:`قسم ${specialty||'خدمة العملاء'}`,description:'تابع مهامك وحضورك، وسجّل العمليات التي تنجزها حسب صلاحيات القسم.',operation:'تحويل أموال',metric:'transfers',metricLabel:'عمليات مسجلة اليوم'}
+            }[specialtyKey];
+            document.getElementById('employee-specialty-title').textContent=specialtyConfig.title;
+            document.getElementById('employee-specialty-description').textContent=specialtyConfig.description;
+            document.getElementById('employee-operation-heading').textContent=`تسجيل ${specialtyConfig.operation}`;
+            document.getElementById('employee-operation-help').textContent=`سجّل ${specialtyConfig.operation} المكتملة. يتم حفظ العملية باسمك ضمن سجل الفرع. أدخل المبالغ الفعلية فقط ولا تكتب بيانات تعريف العملاء.`;
+            const operationSelect=document.getElementById('operation-type');
+            operationSelect.innerHTML=`<option>${escapeHtml(specialtyConfig.operation)}</option>`;
+            operationSelect.value=specialtyConfig.operation;
+            document.getElementById('employee-specialty-metrics').innerHTML=`<span class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-[11px]">${specialtyConfig.metricLabel}: <strong>${Number(emp.metrics?.[specialtyConfig.metric]||0).toLocaleString('ar-JO')}</strong></span><span class="px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-[11px]">تقييم الأداء: <strong>${Number(emp.rating||0)}٪</strong></span>`;
             document.getElementById('emp-portal-salary').innerText = Number(emp.salary).toLocaleString() + ' د.أ';
             document.getElementById('emp-portal-rating').innerText = emp.rating + '%';
             const today = localDateString();
