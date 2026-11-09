@@ -35,8 +35,12 @@ CREATE TABLE IF NOT EXISTS operations (
  operation_type text NOT NULL CHECK(operation_type IN ('تحويل أموال','تصريف عملات','محافظ إلكترونية')),
  amount numeric(14,2) NOT NULL CHECK(amount > 0), currency_from text NOT NULL CHECK(currency_from IN ('JOD','USD','SAR','AED','EUR')),
  result_amount numeric(14,2) NOT NULL CHECK(result_amount >= 0), currency_to text NOT NULL CHECK(currency_to IN ('JOD','USD','SAR','AED','EUR')),
- reference_code text NOT NULL DEFAULT '', note text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now()
+ exchange_rate numeric(24,12) NOT NULL DEFAULT 1 CHECK(exchange_rate > 0), reference_code text NOT NULL DEFAULT '', note text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE operations ADD COLUMN IF NOT EXISTS exchange_rate numeric(24,12) NOT NULL DEFAULT 1 CHECK(exchange_rate > 0);
+UPDATE operations SET exchange_rate=result_amount/NULLIF(amount,0) WHERE amount>0 AND result_amount>0 AND exchange_rate=1;
 CREATE INDEX IF NOT EXISTS attendance_date_idx ON attendance(work_date);
 CREATE INDEX IF NOT EXISTS tasks_employee_idx ON tasks(employee_id, status);
 CREATE INDEX IF NOT EXISTS operations_employee_idx ON operations(employee_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS operations_created_idx ON operations(created_at DESC);
+CREATE INDEX IF NOT EXISTS audit_created_idx ON audit_log(created_at DESC);
