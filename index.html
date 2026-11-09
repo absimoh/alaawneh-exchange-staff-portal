@@ -962,7 +962,7 @@
             const typeRows=operationTypes.map(type=>({type,count:todayOps.filter(o=>o.type===type).length}));
             const maxOps=Math.max(1,...typeRows.map(x=>x.count));
             const approved=appState.employees.filter(e=>e.approved);
-            const present=approved.filter(e=>e.attendance?.date===today&&e.attendance?.clockIn&&!e.attendance?.clockOut).length;
+            const present=approved.filter(e=>e.attendance?.date===today&&e.attendance?.clockIn&&!e.attendance?.clockOut&&e.status==='على رأس العمل').length;
             const breaks=approved.filter(e=>e.status==='في استراحة'||e.status==='في اجتماع').length;
             const ended=approved.filter(e=>e.status==='انتهى الدوام').length;
             const noClock=approved.filter(e=>e.attendance?.date!==today||!e.attendance?.clockIn).length;
@@ -1040,6 +1040,7 @@
             const emp = appState.employees.find(e => e.id === appState.currentUser.id) || appState.currentUser;
             appState.currentUser = emp;
             navigateSidebarState();
+            const today = localDateString();
 
             document.getElementById('emp-portal-name').innerText = emp.name;
             document.getElementById('emp-portal-status').innerText = emp.status;
@@ -1051,20 +1052,23 @@
                 transfer:{title:'قسم تحويل الأموال',description:'مساحة مخصصة لتسجيل ومراجعة التحويلات التي تنجزها، مع متابعة حضورك ومهامك اليومية.',operation:'تحويل أموال',metric:'transfers',metricLabel:'تحويلات مسجلة اليوم'},
                 exchange:{title:'قسم تصريف العملات',description:'تابع عمليات تصريف العملات التي سجلتها اليوم. يظهر سعر التنفيذ المحسوب لكل عملية من المبالغ المدخلة.',operation:'تصريف عملات',metric:'exchange',metricLabel:'عمليات تصريف اليوم'},
                 wallet:{title:'قسم المحافظ الإلكترونية',description:'سجّل عمليات الإيداع والخدمات المنفذة عبر المحافظ وتابع سجل عملياتك ومهامك.',operation:'محافظ إلكترونية',metric:'wallets',metricLabel:'عمليات المحافظ اليوم'},
-                cashier:{title:'قسم الصندوق',description:'تابع عمليات الصندوق المسجلة ومؤشرات دوامك اليومية من مساحة العمل الخاصة بك.',operation:'تحويل أموال',metric:'transfers',metricLabel:'عمليات مسجلة اليوم'},
-                service:{title:`قسم ${specialty||'خدمة العملاء'}`,description:'تابع مهامك وحضورك، وسجّل العمليات التي تنجزها حسب صلاحيات القسم.',operation:'تحويل أموال',metric:'transfers',metricLabel:'عمليات مسجلة اليوم'}
+                cashier:{title:'قسم الصندوق',description:'تابع عمليات الفرع المتاحة ومؤشرات دوامك اليومية من مساحة العمل الخاصة بك.',operation:null,metric:null,metricLabel:'عمليات مسجلة اليوم'},
+                service:{title:`قسم ${specialty||'خدمة العملاء'}`,description:'تابع مهامك وحضورك، وسجّل العمليات التي تنجزها حسب صلاحيات القسم.',operation:null,metric:null,metricLabel:'عمليات مسجلة اليوم'}
             }[specialtyKey];
             document.getElementById('employee-specialty-title').textContent=specialtyConfig.title;
             document.getElementById('employee-specialty-description').textContent=specialtyConfig.description;
-            document.getElementById('employee-operation-heading').textContent=`تسجيل ${specialtyConfig.operation}`;
-            document.getElementById('employee-operation-help').textContent=`سجّل ${specialtyConfig.operation} المكتملة. يتم حفظ العملية باسمك ضمن سجل الفرع. أدخل المبالغ الفعلية فقط ولا تكتب بيانات تعريف العملاء.`;
+            const operationTypes=['تحويل أموال','تصريف عملات','محافظ إلكترونية'];
+            const allowedOperationTypes=specialtyConfig.operation?[specialtyConfig.operation]:operationTypes;
+            const previousOperation=document.getElementById('operation-type').value;
+            document.getElementById('employee-operation-heading').textContent=`تسجيل ${specialtyConfig.operation||'عملية فرع'}`;
+            document.getElementById('employee-operation-help').textContent=`سجّل ${specialtyConfig.operation||'العملية المكتملة'} التي أنجزتها. يتم حفظها باسمك ضمن سجل الفرع. أدخل المبالغ الفعلية فقط ولا تكتب بيانات تعريف العملاء.`;
             const operationSelect=document.getElementById('operation-type');
-            operationSelect.innerHTML=`<option>${escapeHtml(specialtyConfig.operation)}</option>`;
-            operationSelect.value=specialtyConfig.operation;
-            document.getElementById('employee-specialty-metrics').innerHTML=`<span class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-[11px]">${specialtyConfig.metricLabel}: <strong>${Number(emp.metrics?.[specialtyConfig.metric]||0).toLocaleString('ar-JO')}</strong></span><span class="px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-[11px]">تقييم الأداء: <strong>${Number(emp.rating||0)}٪</strong></span>`;
+            operationSelect.innerHTML=allowedOperationTypes.map(type=>`<option>${escapeHtml(type)}</option>`).join('');
+            operationSelect.value=allowedOperationTypes.includes(previousOperation)?previousOperation:allowedOperationTypes[0];
+            const specialtyMetricValue=specialtyConfig.metric?Number(emp.metrics?.[specialtyConfig.metric]||0):appState.operations.filter(o=>o.createdAt===today).length;
+            document.getElementById('employee-specialty-metrics').innerHTML=`<span class="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-[11px]">${specialtyConfig.metricLabel}: <strong>${specialtyMetricValue.toLocaleString('ar-JO')}</strong></span><span class="px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-[11px]">تقييم الأداء: <strong>${Number(emp.rating||0)}٪</strong></span>`;
             document.getElementById('emp-portal-salary').innerText = Number(emp.salary).toLocaleString() + ' د.أ';
             document.getElementById('emp-portal-rating').innerText = emp.rating + '%';
-            const today = localDateString();
             emp.attendance ||= { date: '', clockIn: '', clockOut: '' };
             emp.metrics ||= { date: today, transfers: 0, exchange: 0, wallets: 0 };
             if (emp.metrics.date !== today) emp.metrics = { date: today, transfers: 0, exchange: 0, wallets: 0 };
