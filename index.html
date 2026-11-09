@@ -88,6 +88,48 @@
             background: rgba(156, 163, 175, 0.4);
             border-radius: 4px;
         }
+        :root { --ink:#101b2d; --navy:#10243b; --green:#117c68; --gold:#c69b55; }
+        body { background:#f3f5f7; color:#172334; }
+        body.dark { background:#0b1420 !important; color:#e8edf3 !important; }
+        header { background:rgba(255,255,255,.93)!important; border-color:#e4e8ec!important; }
+        body.dark header { background:rgba(12,22,35,.94)!important; border-color:#203044!important; }
+        .app-shell { max-width:1440px; margin:auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:28px; }
+        .side-nav { position:sticky; top:88px; align-self:start; border-radius:20px; padding:18px; background:#fff; border:1px solid #e7ebef; box-shadow:0 8px 30px rgba(16,36,59,.04); }
+        body.dark .side-nav { background:#101d2c; border-color:#223246; }
+        .side-nav-title { color:#8b97a5; font-size:10px; font-weight:800; letter-spacing:.08em; padding:10px 12px 7px; }
+        .nav-link { width:100%; display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px; color:#687687; font-size:12px; font-weight:700; text-align:right; transition:.18s; }
+        .nav-link:hover,.nav-link.active { background:#eaf4f1; color:#117c68; }
+        body.dark .nav-link { color:#aab7c5; }
+        body.dark .nav-link:hover,body.dark .nav-link.active { background:#17372f; color:#74ceb7; }
+        .nav-link i { width:18px; text-align:center; }
+        .scroll-mt-24 { scroll-margin-top:100px; }
+        .content-area { min-width:0; }
+        .view-page { animation:rise .25s ease-out; }
+        @keyframes rise { from { opacity:.5; transform:translateY(5px) } to { opacity:1; transform:none } }
+        .premium-card { background:#fff; border:1px solid #e6eaee; border-radius:18px; box-shadow:0 8px 28px rgba(16,36,59,.035); }
+        body.dark .premium-card { background:#111e2d; border-color:#243448; }
+        .page-eyebrow { color:#117c68; font-size:11px; font-weight:800; }
+        .page-title { font-size:26px; line-height:1.35; font-weight:800; color:#172334; }
+        body.dark .page-title { color:#f3f6f9; }
+        .subtle { color:#8793a1; }
+        .stat-card { position:relative; overflow:hidden; }
+        .stat-card:after { content:''; position:absolute; inset-inline-start:-24px; bottom:-38px; width:100px; height:100px; border-radius:50%; background:rgba(17,124,104,.055); }
+        .soft-button { background:#eaf4f1; color:#117c68; border:1px solid #d6e9e3; }
+        body.dark .soft-button { background:#17372f; color:#8bdbc8; border-color:#295348; }
+        .view-page input,.view-page select,.view-page textarea { border-radius:10px; }
+        #view-login,#view-signup { max-width:none; padding-top:32px; }
+        .auth-layout { min-height:calc(100vh - 150px); display:grid; grid-template-columns:1.05fr .95fr; overflow:hidden; border-radius:26px; background:#fff; border:1px solid #e5e9ed; box-shadow:0 20px 65px rgba(16,36,59,.09); }
+        body.dark .auth-layout { background:#111e2d; border-color:#26364a; }
+        .auth-brand-panel { padding:48px; color:white; background:radial-gradient(circle at 15% 15%,rgba(198,155,85,.25),transparent 28%),linear-gradient(145deg,#10243b,#143e49 68%,#117c68); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+        .auth-brand-panel:after { content:'ع'; position:absolute; font-size:430px; font-weight:800; line-height:1; opacity:.035; left:-50px; bottom:-180px; }
+        .auth-form-panel { padding:clamp(25px,5vw,64px); display:flex; align-items:center; }
+        .auth-form-panel>div { width:100%; max-width:440px; margin:auto; }
+        .brand-mark { display:flex; align-items:center; gap:12px; font-weight:800; }
+        .brand-mark-icon { width:44px;height:44px; border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#e4c78e; }
+        .table-shell { border:1px solid #e8ecf0; border-radius:14px; overflow:auto; }
+        body.dark .table-shell { border-color:#25364a; }
+        @media(max-width:850px) { .app-shell { grid-template-columns:1fr; gap:14px; } .side-nav { position:static; display:flex; overflow:auto; gap:4px; padding:8px; border-radius:14px; } .side-nav-title { display:none; } .side-nav .space-y-1 { display:flex; gap:4px; } .side-nav .mt-5 { display:none; } .nav-link { flex:0 0 auto; width:auto; white-space:nowrap; } .auth-layout { grid-template-columns:1fr; } .auth-brand-panel { min-height:210px; padding:26px; } .auth-brand-panel .auth-features { display:none; } }
+        @media(max-width:520px) { .page-title {font-size:21px;} .auth-brand-panel { min-height:170px; } .auth-form-panel {padding:24px 18px;} }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen transition-colors duration-300 light:bg-slate-50 light:text-slate-800">
@@ -133,11 +175,32 @@
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-4rem)]">
+    <main class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8 py-6 min-h-[calc(100vh-4rem)]">
+      <div class="app-shell">
+       <aside id="app-sidebar" class="side-nav hidden">
+        <div class="w-full"><div class="side-nav-title">مساحة العمل</div>
+         <div id="manager-nav" class="hidden space-y-1">
+          <button class="nav-link active" data-nav="manager" onclick="navigateTo('manager')"><i class="fa-solid fa-chart-pie"></i> نظرة عامة</button>
+          <button class="nav-link" data-nav="employees" onclick="navigateTo('manager','employees')"><i class="fa-solid fa-users"></i> الموظفون والرواتب</button>
+          <button class="nav-link" data-nav="operations" onclick="navigateTo('manager','operations')"><i class="fa-solid fa-arrow-right-arrow-left"></i> سجل العمليات</button>
+          <button class="nav-link" data-nav="activity" onclick="navigateTo('manager','activity')"><i class="fa-regular fa-bell"></i> الإنجاز والحضور</button>
+         </div>
+         <div id="employee-nav" class="hidden space-y-1">
+          <button class="nav-link active" data-nav="employee" onclick="navigateTo('employee')"><i class="fa-solid fa-house"></i> مساحة عملي</button>
+          <button class="nav-link" data-nav="employee-operations" onclick="navigateTo('employee','operations')"><i class="fa-solid fa-arrow-right-arrow-left"></i> تسجيل عملية</button>
+          <button class="nav-link" data-nav="employee-tasks" onclick="navigateTo('employee','tasks')"><i class="fa-solid fa-list-check"></i> مهامي وملفاتي</button>
+         </div>
+         <div class="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-400 leading-5"><i class="fa-solid fa-lock ml-1 text-emerald-600"></i> مساحة عمل داخلية<br>تجريبية للعرض والتقييم</div>
+        </div>
+       </aside>
+       <div class="content-area">
 
         <!-- LOGIN VIEW -->
-        <section id="view-login" class="view-page max-w-md mx-auto pt-10">
-            <div class="bg-slate-800/80 light:bg-white border border-slate-700/60 light:border-slate-200 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
+        <section id="view-login" class="view-page">
+          <div class="auth-layout">
+           <div class="auth-brand-panel"><div><div class="brand-mark"><div class="brand-mark-icon"><i class="fa-solid fa-building-columns"></i></div><div>العلاونة للصرافة<span class="block text-[10px] text-white/60 font-medium mt-1">إدارة الفروع والموظفين</span></div></div><div class="mt-20 relative z-10"><div class="text-xs text-emerald-200 font-bold mb-3">منصة تشغيل الفروع</div><h2 class="text-3xl md:text-4xl font-extrabold leading-relaxed">كل تفاصيل الفرع،<br>في مكان واحد.</h2><p class="text-sm text-white/65 mt-4 max-w-sm leading-7">تابع الحضور والمهام والعمليات اليومية، وامنح فريقك مساحة واضحة للعمل والإنجاز.</p></div></div><div class="auth-features relative z-10 flex gap-6 text-[11px] text-white/60"><span><i class="fa-solid fa-shield-halved text-amber-200 ml-1"></i> وصول حسب الصلاحية</span><span><i class="fa-solid fa-clock text-amber-200 ml-1"></i> متابعة يومية</span></div></div>
+           <div class="auth-form-panel"><div>
+            <div class="premium-card rounded-3xl p-8 shadow-xl">
                 <div class="text-center mb-8">
                     <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 mx-auto flex items-center justify-center text-2xl mb-4 border border-cyan-500/20">
                         <i class="fa-solid fa-user-lock"></i>
@@ -170,13 +233,15 @@
                     <p class="text-xs text-slate-400">ليس لديك حساب؟</p>
                     <button onclick="navigateTo('signup')" class="mt-2 text-sm text-cyan-400 hover:underline font-semibold">إنشاء حساب جديد للموظفين</button>
                 </div>
-            </div>
-
+            </div></div>
         </section>
 
         <!-- SIGNUP VIEW -->
-        <section id="view-signup" class="view-page hidden max-w-md mx-auto pt-6">
-            <div class="bg-slate-800/80 light:bg-white border border-slate-700/60 light:border-slate-200 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
+        <section id="view-signup" class="view-page hidden">
+          <div class="auth-layout">
+           <div class="auth-brand-panel"><div><div class="brand-mark"><div class="brand-mark-icon"><i class="fa-solid fa-building-columns"></i></div><div>العلاونة للصرافة<span class="block text-[10px] text-white/60 font-medium mt-1">بوابة انضمام الموظفين</span></div></div><div class="mt-20 relative z-10"><div class="text-xs text-emerald-200 font-bold mb-3">خطوة أولى نحو فريق منظم</div><h2 class="text-3xl font-extrabold leading-relaxed">حسابك المهني<br>يبدأ من هنا.</h2><p class="text-sm text-white/65 mt-4 max-w-sm leading-7">أنشئ حساب الموظف. بعد مراجعة الإدارة والموافقة، ستتمكن من متابعة عملك ومهامك.</p></div></div></div>
+           <div class="auth-form-panel"><div>
+            <div class="premium-card rounded-3xl p-8 shadow-xl">
                 <div class="text-center mb-6">
                     <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center text-xl mb-3 border border-emerald-500/20">
                         <i class="fa-solid fa-user-plus"></i>
@@ -236,13 +301,13 @@
                 <div class="mt-6 pt-4 border-t border-slate-700/50 light:border-slate-200 text-center">
                     <button onclick="navigateTo('login')" class="text-xs text-slate-400 hover:text-white transition">العودة لتسجيل الدخول</button>
                 </div>
-            </div>
+            </div></div>
         </section>
 
         <!-- MANAGER DASHBOARD VIEW -->
         <section id="view-manager" class="view-page hidden space-y-6">
             <!-- Manager Top Greeting Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-800/50 light:bg-white border border-slate-700/50 light:border-slate-200 p-6 rounded-3xl backdrop-blur-sm shadow-xl">
+                <div class="premium-card flex flex-col md:flex-row md:items-center justify-between gap-4 p-6">
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold mb-2">
                         <i class="fa-solid fa-shield-halved"></i> لوحة الإدارة العليا
@@ -259,7 +324,7 @@
 
             <!-- Stats Overview Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 p-5 rounded-2xl">
+                <div class="premium-card stat-card p-5">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs text-slate-400 font-semibold">إجمالي الموظفين</span>
                         <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center"><i class="fa-solid fa-users"></i></div>
@@ -267,7 +332,7 @@
                     <span id="stat-total-emp" class="text-2xl font-bold">0</span>
                     <span class="text-[10px] text-emerald-400 block mt-1"><i class="fa-solid fa-circle-check"></i> متصلون الآن بالنظام</span>
                 </div>
-                <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 p-5 rounded-2xl">
+                <div class="premium-card stat-card p-5">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs text-slate-400 font-semibold">متوسط تقييم الأداء</span>
                         <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-star"></i></div>
@@ -275,7 +340,7 @@
                     <span id="stat-avg-rating" class="text-2xl font-bold">0%</span>
                     <span class="text-[10px] text-amber-400 block mt-1"><i class="fa-solid fa-arrow-up"></i> أداء ممتاز هذا الشهر</span>
                 </div>
-                <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 p-5 rounded-2xl">
+                <div class="premium-card stat-card p-5">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs text-slate-400 font-semibold">مجموّع كتلة الرواتب</span>
                         <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><i class="fa-solid fa-money-bill-wave"></i></div>
@@ -283,7 +348,7 @@
                     <span id="stat-total-payroll" class="text-2xl font-bold">$0</span>
                     <span class="text-[10px] text-slate-400 block mt-1">يُحدث حسب التقييمات</span>
                 </div>
-                <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 p-5 rounded-2xl">
+                <div class="premium-card stat-card p-5">
                     <div class="flex justify-between items-start mb-3">
                         <span class="text-xs text-slate-400 font-semibold">إشارت إتمام العمل</span>
                         <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center"><i class="fa-solid fa-bell"></i></div>
@@ -297,7 +362,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <!-- Employee Table (2 Cols wide) -->
-                <div class="lg:col-span-2 bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+                <div id="manager-employees-section" class="lg:col-span-2 premium-card p-6 scroll-mt-24">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-lg flex items-center gap-2">
                             <i class="fa-solid fa-user-gear text-cyan-400"></i> مراقبة وتقييم الموظفين والرواتب
@@ -326,7 +391,7 @@
                 <!-- Notifications & Activity Log Sidebar (1 Col wide) -->
                 <div class="space-y-6">
                     <!-- Live Task Finish Notifications -->
-                    <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-5 shadow-xl">
+                    <div id="manager-activity-section" class="premium-card p-5 scroll-mt-24">
                         <h3 class="font-bold text-sm mb-3 flex items-center justify-between">
                             <span class="flex items-center gap-2"><i class="fa-solid fa-square-check text-emerald-400"></i> إشعارات الإنجاز الحديثة</span>
                             <span id="notif-badge" class="bg-emerald-500/20 text-emerald-300 text-[10px] px-2 py-0.5 rounded-full font-mono">0 جديد</span>
@@ -337,7 +402,7 @@
                     </div>
 
                     <!-- Live Meetings & Break Monitor -->
-                    <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-5 shadow-xl">
+                    <div class="premium-card p-5">
                         <h3 class="font-bold text-sm mb-3 flex items-center gap-2">
                             <i class="fa-solid fa-headset text-amber-400"></i> مراقبة الاجتماعات والاستراحات
                         </h3>
@@ -348,7 +413,7 @@
                     </div>
                 </div>
             </div>
-            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+            <section id="manager-operations-section" class="premium-card p-6 scroll-mt-24">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
                     <div><h3 class="font-bold text-lg">سجل عمليات الفرع</h3><p class="text-xs text-slate-400">عمليات التحويل والتصريف والمحافظ المسجلة، بدون بيانات تعريف العملاء.</p></div>
                     <select id="operation-employee-filter" onchange="renderOperationsLog()" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-3 py-2 text-xs"><option value="all">كل الموظفين</option></select>
@@ -387,7 +452,7 @@
                 </div>
             </div>
 
-            <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-5 flex flex-wrap items-center justify-between gap-4">
+            <div class="premium-card p-5 flex flex-wrap items-center justify-between gap-4">
                 <div><h3 class="font-bold">الحضور وحالة العمل</h3><p id="emp-attendance-info" class="text-xs text-slate-400 mt-1">لم يتم تسجيل الحضور اليوم</p></div>
                 <div class="flex flex-wrap gap-2">
                     <button id="clock-in-btn" onclick="clockIn()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold">تسجيل الحضور</button>
@@ -401,7 +466,7 @@
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">إيداعات محافظ</label><input id="metric-wallets" type="number" min="0" onchange="saveDailyMetrics()" class="mt-2 w-full bg-slate-900 light:bg-slate-50 border rounded-lg p-2" value="0"></div>
                 <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 p-4 rounded-2xl"><label class="text-xs text-slate-400">ساعات الدوام</label><span id="metric-hours" class="block mt-2 font-bold text-cyan-400">0</span></div>
             </div>
-            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+            <section id="employee-operations-section" class="premium-card p-6 scroll-mt-24">
                 <h3 class="font-bold text-base mb-1">تسجيل عملية فرع</h3><p class="text-xs text-slate-400 mb-4">سجّل العملية بعد إتمامها. لا تدخل اسم العميل أو رقم هويته أو هاتفه أو بيانات حسابه.</p>
                 <form id="operation-form" onsubmit="addOperation(event)" class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
                     <div><label class="block text-xs text-slate-400 mb-1">نوع العملية</label><select id="operation-type" required class="w-full bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl p-2.5 text-xs"><option>تحويل أموال</option><option>تصريف عملات</option><option>محافظ إلكترونية</option></select></div>
@@ -412,15 +477,15 @@
                     <button class="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold">حفظ العملية</button>
                 </form>
             </section>
-            <section class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+            <section id="employee-history-section" class="premium-card p-6 scroll-mt-24">
                 <h3 class="font-bold text-base mb-1">عملياتي المسجلة</h3><p class="text-xs text-slate-400 mb-3">آخر العمليات المكتملة التي سجلتها.</p><div id="employee-operations-list"></div>
             </section>
             <!-- Employee Tasks & Files Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div id="employee-tasks-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6 scroll-mt-24">
 
                 <!-- Assigned Tasks List (2 Cols) -->
                 <div class="lg:col-span-2 space-y-4">
-                    <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl">
+                    <div class="premium-card p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="font-bold text-base flex items-center gap-2">
                                 <i class="fa-solid fa-list-check text-cyan-400"></i> قائمة التكاليف والمهام الحالية
@@ -435,7 +500,7 @@
                 </div>
 
                 <!-- Assigned Files & Documents Sidebar (1 Col) -->
-                <div class="bg-slate-800/40 light:bg-white border border-slate-700/50 light:border-slate-200 rounded-3xl p-6 shadow-xl space-y-4">
+                <div class="premium-card p-6 space-y-4">
                     <h3 class="font-bold text-base flex items-center gap-2">
                         <i class="fa-solid fa-folder-open text-amber-400"></i> ملفات المستندات والموارد المخصصة
                     </h3>
@@ -448,6 +513,8 @@
             </div>
         </section>
 
+       </div>
+      </div>
     </main>
 
     <!-- MODAL: Edit Salary & Rating (Manager Only) -->
@@ -560,11 +627,29 @@
         }
 
         // NAVIGATION & VIEW SWITCHING
-        function navigateTo(viewId) {
+        function navigateTo(viewId, section = '') {
             document.querySelectorAll('.view-page').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`view-${viewId}`);
             if (target) {
                 target.classList.remove('hidden');
+            }
+            const sidebar = document.getElementById('app-sidebar');
+            const managerNav = document.getElementById('manager-nav');
+            const employeeNav = document.getElementById('employee-nav');
+            const authenticated = !!appState.currentUser && ['manager','employee'].includes(viewId);
+            sidebar.classList.toggle('hidden', !authenticated);
+            managerNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'manager');
+            employeeNav.classList.toggle('hidden', !authenticated || appState.currentUser?.role !== 'employee');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            const activeKey = viewId === 'manager' ? (section || 'manager') : viewId === 'employee' ? (section ? `employee-${section}` : 'employee') : '';
+            document.querySelector(`.nav-link[data-nav="${activeKey}"]`)?.classList.add('active');
+            if (viewId === 'manager' && section) {
+                const ids = {employees:'manager-employees-section',operations:'manager-operations-section',activity:'manager-activity-section'};
+                document.getElementById(ids[section])?.scrollIntoView({behavior:'smooth',block:'start'});
+            }
+            if (viewId === 'employee' && section) {
+                const ids = {operations:'employee-operations-section',tasks:'employee-tasks-section'};
+                document.getElementById(ids[section])?.scrollIntoView({behavior:'smooth',block:'start'});
             }
             updateHeaderUI();
         }
@@ -664,6 +749,7 @@
         function renderManagerDashboard() {
             if (!appState.currentUser || appState.currentUser.role !== 'manager') return navigateTo('login');
             document.getElementById('manager-display-name').innerText = appState.currentUser.name;
+            navigateSidebarState();
 
             const tbody = document.getElementById('manager-employees-table-body');
             tbody.innerHTML = '';
@@ -726,6 +812,12 @@
             renderOperationsLog();
         }
 
+        function navigateSidebarState() {
+            document.getElementById('app-sidebar').classList.remove('hidden');
+            document.getElementById('manager-nav').classList.toggle('hidden', appState.currentUser?.role !== 'manager');
+            document.getElementById('employee-nav').classList.toggle('hidden', appState.currentUser?.role !== 'employee');
+        }
+
         function renderNotificationsList() {
             const container = document.getElementById('manager-notifications-list');
             document.getElementById('notif-badge').innerText = `${appState.notifications.length} إشعار`;
@@ -761,6 +853,7 @@
             // Refresh employee data from appState
             const emp = appState.employees.find(e => e.id === appState.currentUser.id) || appState.currentUser;
             appState.currentUser = emp;
+            navigateSidebarState();
 
             document.getElementById('emp-portal-name').innerText = emp.name;
             document.getElementById('emp-portal-status').innerText = emp.status;
