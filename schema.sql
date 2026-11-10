@@ -24,6 +24,7 @@ INSERT INTO attendance_sessions(user_id,work_date,clock_in,clock_out,last_seen)
  );
 CREATE UNIQUE INDEX IF NOT EXISTS attendance_sessions_active_user_idx ON attendance_sessions(user_id,work_date) WHERE clock_out IS NULL;
 CREATE INDEX IF NOT EXISTS attendance_sessions_user_day_idx ON attendance_sessions(user_id,work_date,clock_in DESC);
+CREATE INDEX IF NOT EXISTS attendance_sessions_last_seen_idx ON attendance_sessions(last_seen) WHERE clock_out IS NULL;
 CREATE TABLE IF NOT EXISTS daily_metrics (
  user_id uuid NOT NULL REFERENCES users(id), work_date date NOT NULL DEFAULT CURRENT_DATE,
  transfers integer NOT NULL DEFAULT 0 CHECK(transfers>=0), exchange integer NOT NULL DEFAULT 0 CHECK(exchange>=0),
