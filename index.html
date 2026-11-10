@@ -88,11 +88,11 @@
             background: rgba(156, 163, 175, 0.4);
             border-radius: 4px;
         }
-        :root { --ink:#101b2d; --navy:#10243b; --green:#117c68; --gold:#c69b55; }
-        body { background:#f3f5f7; color:#172334; }
-        body.dark { background:#0b1420 !important; color:#e8edf3 !important; }
+        :root { --ink:#14251d; --navy:#17392f; --green:#16745b; --gold:#c9a66b; --surface:#f6f5ef; }
+        body { background:#f6f5ef; color:#1d2b24; }
+        body.dark { background:#101813 !important; color:#edf2eb !important; }
         header { background:rgba(255,255,255,.93)!important; border-color:#e4e8ec!important; }
-        body.dark header { background:rgba(12,22,35,.94)!important; border-color:#203044!important; }
+        body.dark header { background:rgba(16,27,21,.95)!important; border-color:#2b3e32!important; }
         .app-shell { max-width:1440px; margin:auto; display:grid; grid-template-columns:240px minmax(0,1fr); gap:28px; }
         .app-shell.auth-mode { grid-template-columns:minmax(0,1fr); }
         .side-nav { position:sticky; top:88px; align-self:start; border-radius:20px; padding:18px; background:#fff; border:1px solid #e7ebef; box-shadow:0 8px 30px rgba(16,36,59,.04); }
@@ -109,8 +109,8 @@
         .manager-single .lg\:col-span-2 { grid-column:span 1; }
         .view-page { animation:rise .25s ease-out; }
         @keyframes rise { from { opacity:.5; transform:translateY(5px) } to { opacity:1; transform:none } }
-        .premium-card { background:#fff; border:1px solid #e6eaee; border-radius:18px; box-shadow:0 8px 28px rgba(16,36,59,.035); }
-        body.dark .premium-card { background:#111e2d; border-color:#243448; }
+        .premium-card { background:#fffefa; border:1px solid #e9e6da; border-radius:18px; box-shadow:0 8px 28px rgba(27,47,35,.045); }
+        body.dark .premium-card { background:#17231b; border-color:#2d4033; }
         .page-eyebrow { color:#117c68; font-size:11px; font-weight:800; }
         .page-title { font-size:26px; line-height:1.35; font-weight:800; color:#172334; }
         body.dark .page-title { color:#f3f6f9; }
@@ -123,7 +123,7 @@
         #view-login,#view-signup { max-width:none; padding-top:32px; }
         .auth-layout { min-height:calc(100vh - 150px); display:grid; grid-template-columns:1.05fr .95fr; overflow:hidden; border-radius:26px; background:#fff; border:1px solid #e5e9ed; box-shadow:0 20px 65px rgba(16,36,59,.09); }
         body.dark .auth-layout { background:#111e2d; border-color:#26364a; }
-        .auth-brand-panel { padding:48px; color:white; background:radial-gradient(circle at 15% 15%,rgba(198,155,85,.25),transparent 28%),linear-gradient(145deg,#10243b,#143e49 68%,#117c68); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+        .auth-brand-panel { padding:48px; color:white; background:radial-gradient(circle at 15% 15%,rgba(201,166,107,.27),transparent 28%),linear-gradient(145deg,#17392f,#234838 68%,#16745b); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
         .auth-brand-panel:after { content:'ع'; position:absolute; font-size:430px; font-weight:800; line-height:1; opacity:.035; left:-50px; bottom:-180px; }
         .auth-form-panel { padding:clamp(25px,5vw,64px); display:flex; align-items:center; }
         .auth-form-panel>div { width:100%; max-width:440px; margin:auto; }
@@ -139,13 +139,13 @@
         .side-nav.hidden { display:none; }
         .side-nav .space-y-1.hidden { display:none; }
         .app-shell > .content-area > .view-page { width:100%; }
-        #view-manager > .premium-card:first-child { min-height:150px; background:linear-gradient(120deg,#fff 0%,#f5faf8 70%,#edf6f3 100%); }
-        body.dark #view-manager > .premium-card:first-child { background:linear-gradient(120deg,#111e2d,#142a30); }
+        #view-manager > .premium-card:first-child { min-height:150px; background:linear-gradient(120deg,#fffefa 0%,#f5f5ec 70%,#edf2e7 100%); }
+        body.dark #view-manager > .premium-card:first-child { background:linear-gradient(120deg,#17231b,#1b3025); }
         #view-manager > .premium-card:first-child h2 { font-size:clamp(21px,2.4vw,30px); }
         #view-manager .stat-card { min-height:132px; }
         #view-manager .grid.grid-cols-1.lg\:grid-cols-3 { align-items:start; }
         #view-manager .stat-card > span:nth-of-type(1) { position:relative; z-index:1; font-size:26px; }
-        #view-employee > div:first-child { background:linear-gradient(120deg,#10243b,#14564e)!important; border:0!important; }
+        #view-employee > div:first-child { background:linear-gradient(120deg,#17392f,#16745b)!important; border:0!important; }
         #view-employee > div:first-child #emp-portal-name { color:white; }
         #view-employee > div:first-child #emp-portal-title-dept { color:rgba(255,255,255,.7); }
         #view-employee > div:first-child > div:last-child { background:rgba(255,255,255,.1)!important; border-color:rgba(255,255,255,.16)!important; }
@@ -163,7 +163,7 @@
         body.dark #manager-employees-section thead, body.dark #manager-operations-section thead { background:#172537; }
         #view-login .premium-card, #view-signup .premium-card { border:0; box-shadow:none; background:transparent; }
         header .bg-gradient-to-tr { background:linear-gradient(135deg,#117c68,#c69b55)!important; box-shadow:0 8px 22px rgba(17,124,104,.2)!important; }
-        #login-form button[type="submit"], #signup-form button[type="submit"], #view-employee #operation-form button, #view-manager button[onclick="openAssignTaskModal()"] { background:linear-gradient(110deg,#117c68,#15977b)!important; box-shadow:0 8px 20px rgba(17,124,104,.18)!important; }
+        #login-form button[type="submit"], #signup-form button[type="submit"], #view-employee #operation-form button, #view-manager button[onclick="openAssignTaskModal()"], #form-assign-task button[type="submit"] { background:linear-gradient(110deg,#16745b,#228567)!important; box-shadow:0 8px 20px rgba(22,116,91,.2)!important; }
         #view-manager .text-cyan-400, #view-employee .text-cyan-400 { color:#16836e!important; }
         body.dark #view-manager .text-cyan-400, body.dark #view-employee .text-cyan-400 { color:#68c6ae!important; }
         #view-login input:focus, #view-signup input:focus, #view-signup select:focus, #view-employee input:focus, #view-employee select:focus { outline:none; border-color:#16836e; box-shadow:0 0 0 3px rgba(17,124,104,.12); }
@@ -222,6 +222,18 @@
           .fixed.inset-0 > div { max-height:calc(100dvh - 24px); overflow:auto; }
         }
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+        .text-cyan-400,.text-cyan-300 { color:#188369!important; }
+        .bg-cyan-600,.bg-cyan-500 { background-color:#16745b!important; }
+        .border-cyan-500,.border-cyan-500\/30 { border-color:rgba(201,166,107,.55)!important; }
+        .text-emerald-400 { color:#168064!important; }
+        .bg-emerald-600,.bg-emerald-500 { background-color:#16745b!important; }
+        body.dark .text-cyan-400,body.dark .text-cyan-300 { color:#80c5a5!important; }
+        body.dark .text-emerald-400 { color:#83c6a3!important; }
+        body.dark [class*="bg-slate-900"] { background-color:#141f18!important; }
+        body.dark [class*="bg-slate-800"] { background-color:#1a2a20!important; }
+        body.dark [class*="border-slate-700"] { border-color:#304537!important; }
+        body.light [class*="border-slate-200"] { border-color:#e8e5d9!important; }
+        .auth-brand-panel .brand-mark-icon { color:#f0d59f; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen transition-colors duration-300 light:bg-slate-50 light:text-slate-800">
@@ -569,7 +581,7 @@
             </div>
 
             <div data-employee-page="overview" class="premium-card p-5 flex flex-wrap items-center justify-between gap-4">
-                <div><h3 class="font-bold">الحضور وحالة العمل</h3><p id="emp-attendance-info" class="text-xs text-slate-400 mt-1">لم يتم تسجيل الحضور اليوم</p></div>
+                <div><h3 class="font-bold">الحضور وحالة العمل</h3><p id="emp-attendance-info" class="text-xs text-slate-400 mt-1">لم يتم تسجيل الحضور اليوم</p><p class="text-[10px] text-slate-500 mt-1">يُسجل الانصراف عند تسجيل الخروج أو إغلاق الصفحة.</p></div>
                 <div class="flex flex-wrap gap-2">
                     <button id="clock-in-btn" onclick="clockIn()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold">تسجيل الحضور</button>
                     <select id="work-status-select" onchange="changeWorkStatus(this.value)" class="bg-slate-900 light:bg-slate-50 border border-slate-700 rounded-xl px-3 py-2 text-xs"><option>على رأس العمل</option><option>في اجتماع</option><option>في استراحة</option></select>
@@ -688,8 +700,11 @@
                     <textarea id="assign-task-desc" rows="2" placeholder="أدخل تفاصيل التكليف..." class="w-full bg-slate-800 light:bg-slate-50 border border-slate-700 light:border-slate-300 rounded-xl py-2 px-3 text-xs focus:outline-none"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">رابط HTTPS أو اسم مرجعي للملف (اختياري)</label>
-                    <input type="text" id="assign-file-title" maxlength="300" placeholder="https://… أو اسم المستند" class="w-full bg-slate-800 light:bg-slate-50 border border-slate-700 light:border-slate-300 rounded-xl py-2 px-3 text-xs focus:outline-none">
+                    <label for="assign-file-upload" class="block text-xs text-slate-400 mb-1">رفع ملف من جهازك (PDF أو Word أو Excel أو صورة، حتى 5 ميغابايت)</label>
+                    <input type="file" id="assign-file-upload" accept=".pdf,.docx,.xlsx,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/png,image/jpeg" class="w-full text-xs text-slate-300 file:ml-3 file:rounded-lg file:border-0 file:bg-emerald-700 file:px-3 file:py-2 file:text-white">
+                    <p id="assign-file-name" class="text-[10px] text-slate-500 mt-1" aria-live="polite">لم يتم اختيار ملف</p>
+                    <label for="assign-file-title" class="block text-xs text-slate-400 mb-1 mt-3">أو أضف رابط HTTPS خارجي</label>
+                    <input type="url" id="assign-file-title" maxlength="300" placeholder="https://…" class="w-full bg-slate-800 light:bg-slate-50 border border-slate-700 light:border-slate-300 rounded-xl py-2 px-3 text-xs focus:outline-none">
                 </div>
 
                 <div class="flex gap-2 pt-2">
@@ -723,9 +738,15 @@
             document.documentElement.classList.toggle('dark', localStorage.getItem('app_theme') !== 'light');
             document.body.classList.toggle('light', localStorage.getItem('app_theme') === 'light');
             document.body.classList.toggle('dark', localStorage.getItem('app_theme') !== 'light');
+            document.getElementById('assign-file-upload').addEventListener('change',event=>{const file=event.target.files[0];document.getElementById('assign-file-name').textContent=file?`${file.name} · ${(file.size/1024/1024).toFixed(2)} ميغابايت`:'لم يتم اختيار ملف';});
             checkSession();
             startDynamicStatusRotation();
             setInterval(()=>{if(appState.currentUser) refreshData().catch(()=>{});},20000);
+        });
+        window.addEventListener('pagehide',()=>{
+            if(appState.currentUser?.role!=='employee')return;
+            const url=API+'/employee/attendance/auto-out';
+            if(!navigator.sendBeacon(url,new Blob([],{type:'text/plain'})))fetch(url,{method:'POST',credentials:'same-origin',keepalive:true}).catch(()=>{});
         });
 
         function saveStateToStorage() {
@@ -733,7 +754,9 @@
         }
 
         async function api(path, options = {}) {
-            const res = await fetch(API + path, { credentials:'same-origin', headers:{'Content-Type':'application/json', ...(options.headers||{})}, ...options });
+            const headers={...(options.headers||{})};
+            if(!(options.body instanceof FormData))headers['Content-Type']='application/json';
+            const res = await fetch(API + path, { credentials:'same-origin', ...options, headers });
             const body = await res.json().catch(()=>({error:'تعذر قراءة رد الخادم'}));
             if (!res.ok) throw new Error(body.error || 'حدث خطأ في الطلب');
             return body;
@@ -860,9 +883,11 @@
             } else showToast('الحساب بانتظار تفعيل المدير. احتفظ ببيانات الدخول.', 'info');
         }
 
-        function logout() {
+        async function logout() {
+            const wasEmployee=appState.currentUser?.role==='employee';
+            if(wasEmployee)await api('/employee/attendance/auto-out',{method:'POST'}).catch(()=>{});
             appState.currentUser = null;
-            api('/auth/logout',{method:'POST'}).catch(()=>{});
+            await api('/auth/logout',{method:'POST'}).catch(()=>{});
             navigateTo('login');
             showToast('تم تسجيل الخروج بنجاح', 'info');
         }
@@ -1003,7 +1028,7 @@
         function renderAuditLog(){
             const box=document.getElementById('manager-audit-list');if(!box)return;box.innerHTML='';
             if(!appState.audit.length){box.innerHTML='<p class="text-xs text-slate-500 text-center py-3">لا توجد إجراءات مسجلة بعد.</p>';return;}
-            const labels={employee_approved:'تفعيل حساب موظف',employee_updated:'تعديل راتب أو تقييم',employee_archived:'أرشفة موظف',task_assigned:'إسناد مهمة',task_completed:'إتمام مهمة',attendance_in:'تسجيل حضور',attendance_out:'تسجيل انصراف',status_changed:'تغيير حالة الدوام',operation_recorded:'تسجيل عملية'};
+            const labels={employee_approved:'تفعيل حساب موظف',employee_updated:'تعديل راتب أو تقييم',employee_archived:'أرشفة موظف',task_assigned:'إسناد مهمة',task_completed:'إتمام مهمة',attendance_in:'تسجيل حضور',attendance_out:'تسجيل انصراف',attendance_auto_out:'انصراف تلقائي',status_changed:'تغيير حالة الدوام',operation_recorded:'تسجيل عملية'};
             appState.audit.slice(0,30).forEach(entry=>{const row=document.createElement('div');row.className='flex items-start justify-between gap-2 border-b border-slate-700/40 py-2 text-[11px]';row.innerHTML=`<div><div class="font-bold">${escapeHtml(labels[entry.action]||'تحديث')}</div><div class="text-slate-500 mt-0.5">${escapeHtml(entry.actor)}${entry.target?' · '+escapeHtml(entry.target):''}</div></div><time class="text-slate-500 whitespace-nowrap">${escapeHtml(entry.time)}</time>`;box.appendChild(row);});
         }
 
@@ -1127,13 +1152,13 @@
                     fDiv.className = 'p-3 rounded-xl bg-slate-900/60 light:bg-slate-50 border border-slate-700/40 light:border-slate-200 flex items-center justify-between text-xs hover:border-cyan-500/40 transition';
                     fDiv.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-file-pdf text-red-400 text-base"></i>
+                            <i class="fa-solid ${file.downloadUrl?'fa-paperclip text-emerald-500':'fa-arrow-up-right-from-square text-amber-500'} text-base"></i>
                             <div>
-                                <div class="font-bold text-slate-200 light:text-slate-800">${file.url ? `<a href="${escapeHtml(file.url)}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${escapeHtml(file.title)}</a>` : escapeHtml(file.title)}</div>
+                                <div class="font-bold text-slate-200 light:text-slate-800">${file.downloadUrl ? `<a href="${escapeHtml(file.downloadUrl)}" download class="text-cyan-400 hover:underline">${escapeHtml(file.title)}</a>` : file.url ? `<a href="${escapeHtml(file.url)}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">${escapeHtml(file.title)}</a>` : escapeHtml(file.title)}</div>
                                 <div class="text-[10px] text-slate-400">تاريخ إضافة المرجع: ${file.date}</div>
                             </div>
                         </div>
-                        <span class="text-[10px] text-slate-500">${file.url?'فتح الرابط':'مرجع فقط'}</span>
+                        <span class="text-[10px] text-slate-500">${file.downloadUrl?'تنزيل آمن':file.url?'فتح الرابط':'مرجع فقط'}</span>
                     `;
                     filesContainer.appendChild(fDiv);
                 });
@@ -1178,14 +1203,21 @@
             document.getElementById('modal-assign-task').classList.add('flex');
         }
 
-        function handleAssignTask(e) {
+        async function handleAssignTask(e) {
             e.preventDefault();
             const empId = document.getElementById('assign-emp-select').value;
             const taskTitle = document.getElementById('assign-task-title').value.trim();
             const taskDesc = document.getElementById('assign-task-desc').value.trim();
-            const fileName = document.getElementById('assign-file-title').value.trim();
-
-            api('/manager/tasks',{method:'POST',body:JSON.stringify({employeeId:empId,title:taskTitle,description:taskDesc,fileLabel:fileName})}).then(()=>{closeModal('modal-assign-task');document.getElementById('form-assign-task').reset();return refreshData();}).then(()=>showToast('تم إسناد المهمة للموظف.','success')).catch(err=>showToast(err.message,'error'));
+            const fileLabel = document.getElementById('assign-file-title').value.trim();
+            const fileInput=document.getElementById('assign-file-upload');
+            const file=fileInput.files[0];
+            if(file&&file.size>5*1024*1024)return showToast('الحد الأقصى لحجم الملف 5 ميغابايت.','error');
+            if(file&&fileLabel)return showToast('اختر رفع ملف أو إضافة رابط خارجي، وليس الاثنين معاً.','error');
+            const payload=new FormData();payload.set('employeeId',empId);payload.set('title',taskTitle);payload.set('description',taskDesc);payload.set('fileLabel',fileLabel);if(file)payload.set('file',file,file.name);
+            const button=document.querySelector('#form-assign-task button[type="submit"]');button.disabled=true;button.classList.add('opacity-60');
+            try{await api('/manager/tasks',{method:'POST',body:payload});closeModal('modal-assign-task');document.getElementById('form-assign-task').reset();document.getElementById('assign-file-name').textContent='لم يتم اختيار ملف';await refreshData();showToast('تم إسناد المهمة ومرفقها للموظف.','success');}
+            catch(err){showToast(err.message,'error');}
+            finally{button.disabled=false;button.classList.remove('opacity-60');}
         }
 
         function closeModal(modalId) {
@@ -1208,7 +1240,7 @@
         function clockOut() { api('/employee/attendance/out',{method:'POST'}).then(()=>refreshData()).then(()=>showToast('تم تسجيل الانصراف.','success')).catch(e=>showToast(e.message,'error')); }
         function changeWorkStatus(status) { api('/employee/status',{method:'POST',body:JSON.stringify({status})}).then(()=>refreshData()).catch(e=>{showToast(e.message,'error');refreshData();}); }
         function localDateString(date=new Date()) { const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Amman',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`; }
-        function workedHours(emp) { if(!emp.attendance?.clockIn) return '0'; const [h,m]=emp.attendance.clockIn.split(':').map(Number); const start=h*60+m; const end=emp.attendance.clockOut ? (()=>{const [a,b]=emp.attendance.clockOut.split(':').map(Number);return a*60+b})() : (()=>{const [a,b]=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Amman',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date()).split(':').map(Number);return a*60+b})(); return Math.max(0,Math.round((end-start)/60*10)/10).toString(); }
+        function workedHours(emp) { if(Number.isFinite(Number(emp.attendance?.workedSeconds)))return (Number(emp.attendance.workedSeconds)/3600).toLocaleString('ar-JO',{minimumFractionDigits:0,maximumFractionDigits:1});if(!emp.attendance?.clockIn)return '0';const [h,m]=emp.attendance.clockIn.split(':').map(Number);const start=h*60+m;const end=emp.attendance.clockOut?(()=>{const [a,b]=emp.attendance.clockOut.split(':').map(Number);return a*60+b})():(()=>{const [a,b]=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Amman',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date()).split(':').map(Number);return a*60+b})();return Math.max(0,Math.round((end-start)/60*10)/10).toString(); }
 
         function renderLiveStatusMonitor() {
             const list = document.getElementById('live-status-list');

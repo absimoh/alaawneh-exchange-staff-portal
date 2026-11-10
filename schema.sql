@@ -10,8 +10,20 @@ CREATE TABLE IF NOT EXISTS users (
 ALTER TABLE users ADD COLUMN IF NOT EXISTS disabled boolean NOT NULL DEFAULT false;
 CREATE TABLE IF NOT EXISTS attendance (
  id bigserial PRIMARY KEY, user_id uuid NOT NULL REFERENCES users(id), work_date date NOT NULL DEFAULT CURRENT_DATE,
- clock_in timestamptz, clock_out timestamptz, UNIQUE(user_id, work_date)
+ clock_in timestamptz, clock_out timestamptz, last_seen timestamptz, UNIQUE(user_id, work_date)
 );
+ALTER TABLE attendance ADD COLUMN IF NOT EXISTS last_seen timestamptz;
+CREATE TABLE IF NOT EXISTS attendance_sessions (
+ id bigserial PRIMARY KEY, user_id uuid NOT NULL REFERENCES users(id), work_date date NOT NULL DEFAULT CURRENT_DATE,
+ clock_in timestamptz NOT NULL DEFAULT now(), clock_out timestamptz, last_seen timestamptz NOT NULL DEFAULT now()
+);
+INSERT INTO attendance_sessions(user_id,work_date,clock_in,clock_out,last_seen)
+ SELECT a.user_id,a.work_date,a.clock_in,a.clock_out,COALESCE(a.last_seen,now()) FROM attendance a
+ WHERE a.clock_in IS NOT NULL AND NOT EXISTS (
+  SELECT 1 FROM attendance_sessions s WHERE s.user_id=a.user_id AND s.work_date=a.work_date AND s.clock_in=a.clock_in
+ );
+CREATE UNIQUE INDEX IF NOT EXISTS attendance_sessions_active_user_idx ON attendance_sessions(user_id,work_date) WHERE clock_out IS NULL;
+CREATE INDEX IF NOT EXISTS attendance_sessions_user_day_idx ON attendance_sessions(user_id,work_date,clock_in DESC);
 CREATE TABLE IF NOT EXISTS daily_metrics (
  user_id uuid NOT NULL REFERENCES users(id), work_date date NOT NULL DEFAULT CURRENT_DATE,
  transfers integer NOT NULL DEFAULT 0 CHECK(transfers>=0), exchange integer NOT NULL DEFAULT 0 CHECK(exchange>=0),
@@ -20,8 +32,12 @@ CREATE TABLE IF NOT EXISTS daily_metrics (
 CREATE TABLE IF NOT EXISTS tasks (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(), employee_id uuid NOT NULL REFERENCES users(id),
  title text NOT NULL, description text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','completed')),
- file_label text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now(), completed_at timestamptz
+ file_label text NOT NULL DEFAULT '', created_at timestamptz NOT NULL DEFAULT now(), completed_at timestamptz,
+ file_data bytea, file_mime text, file_name text NOT NULL DEFAULT ''
 );
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS file_data bytea;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS file_mime text;
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS file_name text NOT NULL DEFAULT '';
 CREATE TABLE IF NOT EXISTS notifications (
  id bigserial PRIMARY KEY, employee_id uuid NOT NULL REFERENCES users(id), task_id uuid REFERENCES tasks(id),
  message text NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), read_at timestamptz
